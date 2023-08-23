@@ -10,13 +10,20 @@ def get_config():
     config.tmp = 'tmp'  # don't change cause Wrap app is fixed with file name.
     config.reconstruction_feature_path = f'{config.tmp}/feature.txt'  #no need to change
 
-    #Process tmp folder
-    config.images_folder = '/media/aaron/work/ITRI_SSTC/S100/FY112_FRP/code/FRP/2Dto3D/E041'
+    
+    # I/O (IMPORTANT!! NEED TO BE CHANGED!!!)
+    config.input = '/media/aaron/work/ITRI_SSTC/S100/FY112_FRP/code/FRP/2Dto3D/061301.mp4'
     config.output_folder = '/home/aaron/Desktop/test'
+    
+    #Preprocessing
+    config.split_fps = 6 #only work if input path is video
+    config.split_output_folder = f'./{config.tmp}/frames' # no Need to change
+    
+  
 
     # Meshroom
     config.meshroom_batch = '/home/aaron/Downloads/app/Meshroom-2021.1.0-av2.4.0-centos7-cuda10.2/meshroom_batch'
-    config.meshroom_input = config.images_folder
+    config.meshroom_input = config.input
     config.meshroom_pipline = 'photogrammetry'
 
     #Tracing

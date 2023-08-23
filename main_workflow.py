@@ -5,6 +5,7 @@ from ml_collections import config_flags
 import os
 from utlis.parsing_json import parsing_SFM_json
 from utlis.post_process import process_feature_txt, export_r3ds_format
+from utlis.preprocessing.input_preprocessing import input_preprocessing
 from ray_tracing.main import main as ray_trace
 import shutil
 
@@ -26,8 +27,19 @@ def main(argv):
     if os.path.exists(f'./{cfg.tmp}'):
         shutil.rmtree(f'./{cfg.tmp}')
 
+    #Input Preprocessing
+    res = input_preprocessing(cfg)
+    
+    if not res:
+        logging.fatal('Please check the file path.')
+    
     # Meshroom Dense Reconstruction
-    meshroom_command = f'{cfg.meshroom_batch} -i {cfg.meshroom_input} -p {cfg.meshroom_pipline} -o {os.getcwd()}/{cfg.tmp} --cache {os.getcwd()}/{cfg.tmp}/MeshroomCache'
+    meshroom_command = f'{cfg.meshroom_batch} \
+        -i {cfg.meshroom_input} \
+        -p {cfg.meshroom_pipline} \
+        -o {os.getcwd()}/{cfg.tmp} \
+        --cache {os.getcwd()}/{cfg.tmp}/MeshroomCache'
+
     os.system(meshroom_command)
 
     # Tracing Algorithm
@@ -74,7 +86,7 @@ def main(argv):
                         f'{cfg.output_folder}/intermediate_result')
 
     shutil.rmtree(f'./{cfg.tmp}')
-
+    return
 
 if __name__ == '__main__':
     flags.mark_flags_as_required(['config'])
